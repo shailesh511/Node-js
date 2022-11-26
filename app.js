@@ -1,22 +1,25 @@
+require('dotenv').config()
 require("./config/database").connect();
+
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const cookieParser = require('cookie-parser')
+
+//custom middleware
+const auth = require("./middleware/auth")
+
 
 //import model - user
-
 const User = require("./model/user")
 
 const app = express();
-
-
-
 //go to express documentation => basic routing => req.body
 
 //middleware => whenevr we want to extract/use some information from req.body
-app.use(express.json()) //to be revised
+app.use(express.json()) //grabs the JSON or send the JSON
 app.use(express.urlencoded({extended:true}));
-
+app.use(cookieParser()) //pre-defined middlewares which takes control and help us to grab the cookies
 
 
 //routes
@@ -24,7 +27,8 @@ app.get("/",(req, res)=>{
     res.send("Hello ...")
 })
 
-app.post("/", async (req, res)=>{
+//register
+app.post("/register", async (req, res)=>{
    try{
         //collect all information
         const {firstName, lastName, email, password} = req.body;
@@ -39,7 +43,7 @@ app.post("/", async (req, res)=>{
         let existingUser = await User.findOne({email: email})
             if(existingUser)
             {
-               res.status(401).send("User is already in te database");
+               res.status(401).send("User is already in the database");
             }
       //TODO: check email is in correct format
 
@@ -131,7 +135,19 @@ app.post("/login", async (req, res)=> {
 
 })
 
+//dashboard 
 
-app.listen(Port, ()=>{
-    
+app.get("/dashboard", auth, (req, res) => {
+    res.status("Welcome to the dashboard")
 })
+
+app.get("/profile", (req, auth, res) => {
+  //if auth gets successfully executed we will be having the req.user
+
+
+  res.status("Welcome to the profile")
+})
+
+
+
+module.exports = app;

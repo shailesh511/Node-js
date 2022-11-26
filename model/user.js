@@ -24,3 +24,4 @@ const userSchema = new mongoose.Schema({
 })
 
 module.exports = mongoose.model("user", userSchema)
+//Here "users" will be used as a name for schema and saved
