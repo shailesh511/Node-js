@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 
 const auth = (req, res, next)=>{
    console.log(req.cookies);
@@ -11,26 +12,22 @@ const auth = (req, res, next)=>{
      // const token = req.header("Authorization").replace("Bearer ", "");    
 
       //what if token is not here 
-      if(!token) {
-        return res.status(403).send('token is missing!!!');
-      }
+      if (!token) {
+        return res.status(403).send('token is missing')
+    }
 
-
-      //verify token through jwt
-      try{
+    //verify token
+    try {
         const decode = jwt.verify(token, 'shhhhh')
         console.log(decode);
-
         req.user = decode
-        //extract id from token and query the DB
-        
-      }
 
-      catch(err)
-      {
-        res.status(401).send("token is invalid!!")
-      }
-      return next();
+        
+    } catch (error) {
+        res.status(403).send('token is invalid')
+    }
+
+    return next()
 }
 
 module.exports = auth

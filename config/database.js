@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const {MONGO_URL} = process.env;
 
-let connectionCode = mongoose.connect((MONGO_URL, { useNewUrlParser:true, useUnifiedTopology:true} ))
+const connectionCode = mongoose.connect(MONGO_URL, { useNewUrlParser:true, useUnifiedTopology:true})
                                     .then(console.log("DB connected"))
                                     .catch(err => {
                                         console.log("Connection Failed!!!",err)

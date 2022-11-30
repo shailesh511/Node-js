@@ -138,7 +138,7 @@ app.post("/login", async (req, res)=> {
 //dashboard 
 
 app.get("/dashboard", auth, (req, res) => {
-    res.status("Welcome to the dashboard")
+    res.status(201).send("Welcome to the dashboard")
 })
 
 app.get("/profile", (req, auth, res) => {
